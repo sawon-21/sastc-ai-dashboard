@@ -1,629 +1,358 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SASTC AI</title>
-  <!-- Favicon for browser tab -->
-  <link rel="icon" href="logo.png" type="image/png">
-  <meta name="description" content="HSTU-CSE_25 হলো হাজী মোহাম্মদ দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (HSTU) ভিত্তিক একটি কাস্টম AI অ্যাসিস্ট্যান্ট, যা ১০০% নির্ভুল, প্রমাণভিত্তিক এবং আপডেটেড তথ্য বাংলা ভাষায় সরবরাহ করেন।">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Highlight.js for code syntax highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SASTC AI - Analytics Dashboard</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
-   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
-   
-    :root {
-      --primary: #0B91FF;
-      --primary-dark: #0A7AD9; 
-      --secondary: #120173;
-      --black: #121212;
-      --black-light: #1E1E1E;
-      --dark-gray: #2A2A2A;
-      --white: #F5F5F5;
-      --white-dark: #E0E0E0;
-      --error: #ff4444;
-      --success: #00C851;
-      --border-radius: 12px;
-      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-      --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(0.95); opacity: 0.6; }
-      50% { transform: scale(1.05); opacity: 1; }
-      100% { transform: scale(0.95); opacity: 0.6; }
-    }
-
-    @keyframes typingDots {
-      0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
-      30% { transform: translateY(-5px); opacity: 1; }
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-      20%, 40%, 60%, 80% { transform: translateX(5px); }
-    }
-
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: translateY(-20px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      user-select: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-    }
 
     body {
       font-family: 'Hind Siliguri', sans-serif;
-      background: var(--black);
-      color: var(--white);
-      min-height: 90vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0;
-      overflow: hidden;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 800px;
-      height: 100vh;
-      max-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: #111016;
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
-      overflow: hidden;
-      border: 1px solid var(--dark-gray);
-      position: relative;
-    }
-
-    .chat-header {
-      padding: 8px 16px;
-            background: linear-gradient(120deg, #090046, #0B91FF);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      text-align: center;
-      position: relative;
-      z-index: 10;
-    }
-
-    .chat-header h2 {
-      color: #FFFFFF;
-      font-family: "Orbitron", sans-serif;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      font-size: 1.3rem;
+      background: #1e293b;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 1rem;
       margin: 0;
     }
-    
-    #chat-box {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-      scroll-behavior: smooth;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="10" cy="20" r="1" fill="rgba(255,215,0,0.05)"/><circle cx="70" cy="40" r="1" fill="rgba(255,215,0,0.04)"/><circle cx="50" cy="80" r="1" fill="rgba(255,215,0,0.03)"/></svg>');
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0;
     }
-    
-    .message {
-      max-width: 85%;
-      padding: 14px 18px;
-      border-radius: var(--border-radius);
-      position: relative;
-      line-height: 1.5;
-      word-wrap: break-word;
-      animation: fadeIn 0.4s ease forwards;
-      box-shadow: var(--box-shadow);
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    .user-message {
-      align-self: flex-end;
-      background: var(--primary-dark);
-      color: var(--white);
-      padding: 8px;
-      line-height:1.2;
-      border-bottom-right-radius: 30px;
-    }
-
-    .bot-message {
-      align-self: flex-start;
-      background: #090046;
-      font-weight: 400;
-      color: var(--white);
-      border: 1px solid rgb(140,124,205);
-      border-bottom-left-radius: 5px;
-    }
-
-    .error-message {
-      align-self: center;
-      background: rgba(255, 68, 68, 0.15);
-      color: var(--white);
-      border: 1px solid rgba(255, 68, 68, 0.3);
+    .header {
+      background: linear-gradient(135deg, #3b82f6, #a855f7);
+      padding: 1rem;
+      border-radius: 0.5rem;
       text-align: center;
-      padding: 12px;
-      border-radius: var(--border-radius);
-      animation: shake 0.5s ease;
     }
-
-    .typing-indicator {
-      align-self: flex-start;
-      background: var(--dark-gray);
-      padding: 12px 18px;
-      border-radius: var(--border-radius);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--primary);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      animation: pulse 2s infinite;
+    .header h2 {
+      color: #f59e0b;
+      margin: 0;
+      font-size: 1.8rem;
     }
-
-    .typing-dots {
-      display: flex;
-      gap: 6px;
-    }
-
-    .typing-dots span {
-      width: 8px;
-      height: 8px;
-      background: var(--primary);
-      border-radius: 50%;
-      display: inline-block;
-      animation: typingDots 1.4s infinite ease-in-out;
-    }
-
-    .typing-dots span:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .typing-dots span:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-
-    .chat-input-container {
-      padding: 15px;
-      background: var(--black-light);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      position: relative;
-      z-index: 10;
-    }
-
-    .chat-input-wrapper {
-      display: flex;
-      gap: 12px;
-      align-items: flex-end;
-    }
-
-    #user-input {
-      flex: 1;
-      padding: 14px 18px;
-      border-radius: var(--border-radius);
-      border: none;
-      background: var(--dark-gray);
-      color: var(--white);
-      font-size: 16px;
-      outline: none;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: var(--transition);
-      resize: none;
-      min-height: 60px;
-      max-height: 120px;
-      scrollbar-width: none;
-      font-family: 'Hind Siliguri', sans-serif;
-    }
-
-    #user-input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(11, 145, 255, 0.2);
-    }
-
-    #send-btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: white;
-      border: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    #send-btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-    }
-
-    #send-btn:disabled {
-      background: var(--dark-gray);
-      color: rgba(255, 255, 255, 0.3);
-      transform: none;
-      cursor: not-allowed;
-    }
-
-    #send-btn i {
-      font-size: 18px;
-      transition: var(--transition);
-    }
-
-    /* Quick reply buttons */
-    .quick-replies {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 12px 0;
-      justify-content: flex-start;
-    }
-
-    .quick-reply-btn {
-      background: rgba(11, 145, 255, 0.15);
-      color: var(--primary);
-      border: 1px solid rgba(11, 145, 255, 0.3);
-      border-radius: 18px;
-      padding: 8px 16px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .quick-reply-btn:hover {
-      background: rgba(11, 145, 255, 0.25);
-      transform: translateY(-2px);
-    }
-
-    /* Markdown styling */
-    .message-content pre {
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 8px;
-      padding: 12px;
-      overflow-x: auto;
-      margin: 10px 0;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .message-content code {
-      background: rgba(0, 0, 0, 0.2);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.9em;
-    }
-
-    .message-content blockquote {
-      border-left: 4px solid var(--primary);
-      padding-left: 12px;
-      margin: 10px 0;
-      color: var(--white-dark);
-    }
-
-    .message-content ul, .message-content ol {
-      padding-left: 20px;
-      margin: 10px 0;
-    }
-
-    .message-content table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 10px 0;
-    }
-
-    .message-content th, .message-content td {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 8px;
-    }
-
-    .message-content th {
-      background: rgba(0, 0, 0, 0.2);
-    }
-
-    /* Custom Scrollbar */
-    #chat-box::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    #chat-box::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    #chat-box::-webkit-scrollbar-thumb {
-      background: rgba(11, 145, 255, 0.3);
-      border-radius: 3px;
-    }
-
-    #chat-box::-webkit-scrollbar-thumb:hover {
-      background: rgba(11, 145, 255, 0.5);
-    }
-
-    .message-time {
-      display: none;
-      font-size: 0.6rem;
-      text-align: right;
-      margin-top: 5px;
-      opacity: 0.4;
-      color: inherit;
-    }
-
-    .security-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.95);
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: var(--error);
-      font-size: 1.3rem;
-      backdrop-filter: blur(10px);
-      text-align: center;
-      padding: 20px;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .security-overlay i {
-      font-size: 3rem;
-      animation: pulse 1.5s infinite;
-      color: var(--error);
-    }
-
-    /* Modal Styles */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 2000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(5px);
-      animation: modalFadeIn 0.3s ease-out;
-    }
-
-    .modal-container {
-      background: var(--black-light);
-      border-radius: var(--border-radius);
-      padding: 25px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: var(--box-shadow);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      position: relative;
-    }
-
-    .modal-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .modal-header h3 {
-      color: var(--primary);
-      font-size: 1.5rem;
-      margin-bottom: 5px;
-    }
-
-    .modal-header p {
-      color: var(--white-dark);
+    .header p {
+      color: #e2e8f0;
+      margin: 0;
       font-size: 0.9rem;
     }
-
-    .modal-body {
-      margin-bottom: 25px;
-    }
-
-    .modal-input {
-      width: 100%;
-      padding: 12px 15px;
-      border-radius: var(--border-radius);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: var(--dark-gray);
-      color: var(--white);
-      font-size: 1rem;
-      font-family: 'Hind Siliguri', sans-serif;
-      transition: var(--transition);
-      outline: none;
-    }
-
-    .modal-input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(11, 145, 255, 0.2);
-    }
-
-    .modal-footer {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-    }
-
-    .modal-btn {
-      padding: 10px 25px;
-      border-radius: var(--border-radius);
+    .card {
+      background: #2d3748;
       border: none;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      margin-top: 1rem;
+    }
+    .card-header {
+      background: #374151;
+      border-bottom: 1px solid #4b5563;
+      padding: 0.5rem;
       font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      font-family: 'Hind Siliguri', sans-serif;
+      color: #f59e0b;
     }
-
-    .modal-btn-primary {
-      background: var(--primary);
-      color: var(--white);
+    .card-body {
+      padding: 0.75rem;
     }
-
-    .modal-btn-primary:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
+    .table {
+      color: #e2e8f0;
+      background: #2d3748;
+      margin: 0;
     }
-
-    .input-error {
-      color: var(--error);
-      font-size: 0.8rem;
-      margin-top: 5px;
-      display: none;
+    .table th, .table td {
+      border-color: #4b5563;
+      padding: 0.5rem;
+      vertical-align: middle;
     }
-
-    .input-error.show {
-      display: block;
+    .table-hover tbody tr:hover {
+      background: #374151;
     }
-
-    .success-message {
-      text-align: center;
-      color: var(--success);
+    .collect-box {
+      max-height: 750px;
+      overflow-y: auto;
+      background: #374151;
+      padding: 0.5rem;
+      color: yellow;
+      font-weight: bold;
+      border-radius: 0.5rem;
+      border: 1px solid #4b5563;
       font-size: 1rem;
-      margin-top: 10px;
-      display: none;
+      line-height: 1;
+      white-space: pre-wrap;
     }
-
-    .success-message.show {
-      display: block;
+    .collect-box::-webkit-scrollbar {
+      width: 5px;
     }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .container {
-        height: 100vh;
-        max-height: 100dvh;
-        border-radius: 0;
-        padding: 0;
-        margin: 0;
-      }
-
-      .message {
-        max-width: 90%;
-        padding: 12px 16px;
-        font-size: 16px;
-      }
-
-      #user-input {
-        min-height: 50px;
-        padding: 12px 16px;
-        font-size: 16px;
-      }
-
-      #send-btn {
-        width: 46px;
-        height: 46px;
-      }
-
-      .modal-container {
-        width: 95%;
-        padding: 20px;
-      }
-      
-      .quick-replies {
-        flex-direction: column;
-      }
-      
-      .quick-reply-btn {
-        width: 100%;
-        text-align: center;
-      }
+    .collect-box::-webkit-scrollbar-track {
+      background: #374151;
     }
-
-    /* Hide scrollbar when not needed */
-    .hide-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    .collect-box::-webkit-scrollbar-thumb {
+      background: #60a5fa;
+      border-radius: 3px;
     }
-
-    .hide-scrollbar::-webkit-scrollbar {
-      display: none;
+    .input-group input, .input-group select {
+      background: #374151;
+      color: #e2e8f0;
+      border-color: #4b5563;
+      padding: 0.5rem;
+    }
+    .input-group input::placeholder {
+      color: #9ca3af;
+    }
+    .btn-primary {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      padding: 0.5rem 1rem;
+    }
+    .btn-primary:hover {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+    .btn-success {
+      background: #10b981;
+      border-color: #10b981;
+      padding: 0.5rem 1rem;
+    }
+    .btn-success:hover {
+      background: #059669;
+      border-color: #059669;
+    }
+    .btn-purple {
+      background: #a855f7;
+      border-color: #a855f7;
+      padding: 0.5rem 1rem;
+    }
+    .btn-purple:hover {
+      background: #9333ea;
+      border-color: #9333ea;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.5rem;
+      margin-top: 1rem;
+      align-items: center;
+    }
+    .stat-card {
+      background: #374151;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      border: 1px solid #3b82f6;
+    }
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: white;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+    .pagination {
+      margin: 0.5rem 0;
+    }
+    .pagination .page-link {
+      background: #374151;
+      font-size:15px;
+      padding:5px;
+      color: #e2e8f0;
+      border-color: #4b5563;
+      cursor: pointer;
+    }
+    .pagination .page-item.active .page-link {
+      background: #3b82f6;
+      border-color: #3b82f6;
+    }
+    a.collect-link {
+      background-color: #f44336;
+      color: white;
+      padding: 14px 25px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 0.3rem;
+      margin-top: 0.5rem;
+    }
+    a.collect-link:hover {
+      background-color: #d32f2f;
+      text-decoration: none;
+    }
+    /* Cursor pointer for clickable rows */
+    .cursor-pointer {
+      cursor: pointer;
+    }
+    /* Preloader styles */
+    #preloader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease;
+    }
+    #preloader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Message grouping styles */
+    .message-group {
+      margin-bottom: 0.5rem;
+      border-left: 3px solid #3b82f6;
+      padding-left: 0.5rem;
+    }
+    .user-message {
+      background-color:#FAF9F6 ;
+    }
+    .bot-message {
+      background-color: #FFC4DA;
+      margin-left: 1rem;
+      border-left-color: #10b981;
+    }
+    .message-sender {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #f59e0b;
+    }
+    .message-time {
+      font-size: 0.75rem;
+      color: #9ca3af;
     }
   </style>
 </head>
-<body class="noselect">
+<body>
+  <!-- Pre-loader -->
+  <div id="preloader">
+    <div class="spinner-border text-primary" style="width:3rem; height:3rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
   <div class="container">
-    <div class="chat-header">
-      <h2>SASTC AI Assistant</h2>
+    <!-- Header -->
+    <div class="header">
+      <h2><i class="fas fa-chart-line me-2"></i>Sawon AI Analytics</h2>
+      <p>Real-time user interaction insights</p>
     </div>
 
-    <div class="chat-box" id="chat-box">
-      <!-- Messages will appear here -->
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card animate-fade-in">
+        <div class="stat-value" id="totalUsers">0</div>
+        <div class="stat-label">Total Users</div>
+      </div>
+      <div class="stat-card animate-fade-in">
+        <div class="stat-value" id="totalMessages">0</div>
+        <div class="stat-label">Total Messages</div>
+      </div>
+      <div class="stat-card animate-fade-in">
+        <div class="stat-value" id="avgWords">0</div>
+        <div class="stat-label">Avg. Words/Message</div>
+      </div>
+      <div class="stat-card animate-fade-in">
+        <div class="stat-value" id="totalWords">0</div>
+        <div class="stat-label">Total Word Count</div>
+      </div>
+      <a href="#cd" class="collect-link">Collect Data</a>
     </div>
 
-    <div class="chat-input-container">
-      <!-- Quick reply buttons (initially hidden) -->
-      <div class="quick-replies" id="quickReplies" style="display: none;">
-        <button class="quick-reply-btn" data-query="HSTU CSE Department সম্পর্কে বলুন">HSTU CSE Department</button>
-        <button class="quick-reply-btn" data-query="CSE সিলেবাস সম্পর্কে জানতে চাই">CSE সিলেবাস</button>
-        <button class="quick-reply-btn" data-query="কোডিং শেখার উপায়">কোডিং শেখা</button>
-        <button class="quick-reply-btn" data-query="SASTC Honours ভর্তি তথ্য">ভর্তি তথ্য (Honours) </button>
-      </div>
-      
-      <div class="chat-input-wrapper">
-        <textarea id="user-input" placeholder="আপনার বার্তা লিখুন..." rows="1"></textarea>
-        <button id="send-btn" onclick="sendMessage()">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Security overlay (initially hidden) -->
-  <div class="security-overlay" id="securityOverlay" style="display: none;">
-    <i class="fas fa-shield-alt"></i>
-    <div>অননুমোদিত অ্যাক্সেস সনাক্ত করা হয়েছে!<br>এই কর্মকাণ্ড লগ করা হয়েছে এবং রিপোর্ট করা হবে।</div>
-  </div>
-
-  <!-- Name input modal (initially hidden) -->
-  <div class="modal-overlay" id="nameModal" style="display: none;">
-    <div class="modal-container">
-      <div class="modal-header">
-        <h3>👋 স্বাগতম SASTC AI</h3>
-        <p>এটি একটি AI Assistant, যা আপনার প্রশ্নের উত্তর দিতে, আপনাকে শেখাতে সহায়তা করতে এবং <b>Govt. Shahid Akbar Ali Science And Technology College</b>-এর প্রয়োজনীয় তথ্য দ্রুত সরবরাহ করতে সক্ষম।</p>
-      </div>
-      <div class="modal-body">
-        <input type="text" id="nameInput" class="modal-input" placeholder="আপনার পূর্ণ নাম " maxlength="30">
-        <div class="input-error" id="nameError"> Required </div>
-        <div class="success-message" id="nameSuccess">
-          <i class="fas fa-check-circle"></i>
+    <!-- Messages -->
+    <div class="card animate-fade-in">
+      <div class="card-header">Conversations</div>
+      <div class="card-body">
+        <div class="input-group mb-2">
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
+          <input id="messageSearch" type="text" class="form-control" placeholder="Search messages or users...">
+          <select id="messageSort" class="form-select w-auto">
+            <option value="timestamp-desc">Newest First</option>
+            <option value="timestamp-asc">Oldest First</option>
+            <option value="wordCount-desc">Most Words</option>
+            <option value="wordCount-asc">Fewest Words</option>
+          </select>
         </div>
-        
+        <div id="conversationList"></div>
+        <nav id="conversationPagination" class="d-flex justify-content-center"></nav>
       </div>
-      <div class="modal-footer">
-        <button class="modal-btn modal-btn-primary" id="saveNameBtn">শুরু করুন</button>
+    </div>
+
+    <!-- Questions + Answers -->
+    <div class="card animate-fade-in">
+      <div class="card-header">Questions & Answers</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Sender</th>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Words</th>
+              </tr>
+            </thead>
+            <tbody id="questionList"></tbody>
+          </table>
+        </div>
+        <nav id="questionPagination" class="d-flex justify-content-center"></nav>
+      </div>
+    </div>
+
+    <!-- Collected Text -->
+    <div id="cd" class="card animate-fade-in">
+      <div class="card-header">Collected Message Text</div>
+      <div class="card-body">
+        <div class="mb-2 d-flex gap-2 flex-wrap">
+          <select id="collectFilter" class="form-select w-auto bg-dark text-white border-dark">
+            <option value="today">Today</option>
+            <option value="yesterday">Yesterday</option>
+            <option value="previous">Previous (All)</option>
+          </select>
+          <button id="collectButton" class="btn btn-primary"><i class="fas fa-cloud-download-alt me-1"></i>Collect</button>
+          <button id="copyButton" class="btn btn-success" disabled><i class="fas fa-copy me-1"></i>Copy</button>
+        </div>
+        <div id="collectBox" class="collect-box" aria-live="polite" aria-atomic="true"></div>
       </div>
     </div>
   </div>
 
-  <script type="module">
-    // Import the required Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
-    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+  <!-- Modal -->
+  <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content bg-dark text-light">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailsModalLabel">Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="detailsModalBody" style="white-space: pre-wrap;"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    // Your Firebase configuration
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyB9Lg7ez4pHGnq8AtwVPDapNLQ8ntAxeu4",
       authDomain: "sawon-ai.firebaseapp.com",
@@ -635,509 +364,392 @@
       measurementId: "G-XBQS6F62Q8"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
-    const database = getDatabase(app);
+    const db = getDatabase(app);
 
-// Replace the old saveUserInput function with this updated version
-function saveUserInput(message, isUser = true) {
-  try {
-    const userName = localStorage.getItem("userName") || "Anonymous";
-    const timestamp = Date.now();
+    // DOM
+    const conversationList = document.getElementById("conversationList");
+    const questionList = document.getElementById("questionList");
+    const collectBox = document.getElementById("collectBox");
+    const messageSearch = document.getElementById("messageSearch");
+    const messageSort = document.getElementById("messageSort");
+    const collectFilter = document.getElementById("collectFilter");
+    const totalUsers = document.getElementById("totalUsers");
+    const totalMessages = document.getElementById("totalMessages");
+    const avgWords = document.getElementById("avgWords");
+    const totalWords = document.getElementById("totalWords");
+    const conversationPagination = document.getElementById("conversationPagination");
+    const questionPagination = document.getElementById("questionPagination");
+    const collectButton = document.getElementById("collectButton");
+    const copyButton = document.getElementById("copyButton");
+    const preloader = document.getElementById("preloader");
 
-    // Save to local storage (keeps existing behaviour)
-    const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
-    chatHistory.push({
-      sender: isUser ? "user" : "bot",
-      message: message,
-      timestamp: timestamp
-    });
-    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+    // Global
+    let allMessages = [];
+    let allQuestions = [];
+    let groupedConversations = [];
+    const itemsPerPage = 10;
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
 
-    // ✅ Save BOTH user and bot messages to Firebase
-    const messagesRef = ref(database, analysis/${userName}/${timestamp});
-    const data = {
-      sender: isUser ? "user" : "bot",
-      message: message.trim(),
-      userName: userName,
-      // mark whether this message is a question (only true when it ends with '?')
-      isQuestion: message.trim().endsWith("?"),
-      wordCount: message.trim().length === 0 ? 0 : message.trim().split(/\s+/).length,
-      timestamp: timestamp
-    };
-
-    // Use set() at a timestamped path (as before)
-    set(messagesRef, data);
-
-  } catch (error) {
-    console.error("Save error:", error);
-  }
-}
-
-    // Make the function available globally
-    window.saveUserInput = saveUserInput;
-  </script>
-
-  <script>
-    // ==================== SECURITY MEASURES ====================
-    // Block all possible inspection methods
-    document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-      showSecurityAlert('Right click disabled');
-      return false;
-    });
-
-    document.addEventListener('keydown', function(e) {
-      // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+Shift+C
-      if (e.key === 'F12' || 
-          (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
-          (e.ctrlKey && e.key === 'u') ||
-          (e.key === 'PrintScreen')) {
-        e.preventDefault();
-        showSecurityAlert('Developer tools access blocked');
-        return false;
-      }
-      
-      // Block view source
-      if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
-        e.preventDefault();
-        showSecurityAlert('View source blocked');
-        return false;
-      }
-    });
-    
-    // Block text selection
-    document.addEventListener('selectstart', function(e) {
-      e.preventDefault();
-      return false;
-    });
-    
-    // Block dragging images
-    document.addEventListener('dragstart', function(e) {
-      e.preventDefault();
-      return false;
-    });
-
-    // Block keyboard shortcuts
-    document.onkeydown = function(e) {
-      if (e.keyCode === 123 || // F12
-          (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
-          (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
-          (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
-        e.preventDefault();
-        showSecurityAlert('Keyboard shortcut blocked');
-        return false;
-      }
-    };
-
-    // Security alert function
-    function showSecurityAlert(reason) {
-      const overlay = document.getElementById('securityOverlay');
-      if (overlay.style.display === 'flex') return;
-      
-      overlay.style.display = 'flex';
-      
-      // Log the attempt (in a real app, you'd send this to your server)
-      console.warn(Security alert: ${reason} - ${new Date().toISOString()});
-      
-      setTimeout(() => {
-        overlay.style.display = 'none';
-      }, 4000);
+    function hidePreloader() {
+      preloader.classList.add('hidden');
+      setTimeout(() => { preloader.style.display = 'none'; }, 300);
     }
 
-    // ==================== NAME INPUT MODAL ====================
-    function showNameModal() {
-      const modal = document.getElementById('nameModal');
-      const nameInput = document.getElementById('nameInput');
-      const nameError = document.getElementById('nameError');
-      const nameSuccess = document.getElementById('nameSuccess');
-      const saveBtn = document.getElementById('saveNameBtn');
+    function showEmptyState(container, message) {
+      if (container.tagName === 'TBODY') {
+        container.innerHTML = <tr><td colspan="4" class="text-center text-muted">${message}</td></tr>;
+      } else {
+        container.innerHTML = <p class="text-center text-muted">${message}</p>;
+      }
+    }
+
+    function formatDate(timestamp) {
+      return new Date(timestamp).toLocaleString();
+    }
+
+    function updatePagination(items, currentPage, container, callback) {
+      container.innerHTML = "";
+      const totalPages = Math.ceil(items.length / itemsPerPage);
+      if (totalPages <= 1) return;
+
+      const ul = document.createElement("ul");
+      ul.className = "pagination";
+
+      const prevLi = document.createElement("li");
+      prevLi.className = page-item ${currentPage === 1 ? 'disabled' : ''};
+      prevLi.innerHTML = <button class="page-link">&laquo;</button>;
+      ul.appendChild(prevLi);
+      prevLi.querySelector("button").addEventListener("click", () => {
+        if (currentPage > 1) callback(currentPage - 1);
+      });
+
+      for (let page = 1; page <= totalPages; page++) {
+        const li = document.createElement("li");
+        li.className = page-item ${page === currentPage ? 'active' : ''};
+        li.innerHTML = <button class="page-link">${page}</button>;
+        ul.appendChild(li);
+        li.querySelector("button").addEventListener("click", () => {
+          callback(page);
+        });
+      }
+
+      const nextLi = document.createElement("li");
+      nextLi.className = page-item ${currentPage === totalPages ? 'disabled' : ''};
+      nextLi.innerHTML = <button class="page-link">&raquo;</button>;
+      ul.appendChild(nextLi);
+      nextLi.querySelector("button").addEventListener("click", () => {
+        if (currentPage < totalPages) callback(currentPage + 1);
+      });
+
+      container.appendChild(ul);
+    }
+
+    function showDetailsModal(title, content) {
+      document.getElementById('detailsModalLabel').textContent = title;
+      document.getElementById('detailsModalBody').textContent = content;
+      new bootstrap.Modal(document.getElementById('detailsModal')).show();
+    }
+
+    // Group messages by conversation (user message followed by bot response)
+    function groupMessagesByConversation(messages) {
+      const sortedMessages = [...messages].sort((a, b) => a.timestamp - b.timestamp);
+      const conversations = [];
+      let currentConversation = null;
       
-      // Show modal
-      modal.style.display = 'flex';
-      nameInput.focus();
+      sortedMessages.forEach(msg => {
+        if (msg.sender === "user") {
+          // Start a new conversation with user message
+          if (currentConversation) {
+            conversations.push(currentConversation);
+          }
+          currentConversation = {
+            userMessage: msg,
+            botMessage: null,
+            timestamp: msg.timestamp
+          };
+        } else if (msg.sender === "bot" && currentConversation) {
+          // Add bot response to current conversation
+          currentConversation.botMessage = msg;
+          conversations.push(currentConversation);
+          currentConversation = null;
+        }
+      });
       
-      // Check if name exists in localStorage
-      const savedName = localStorage.getItem('userName');
-      if (savedName && savedName.length >= 2) {
-        nameInput.value = savedName;
+      // Add the last conversation if it exists
+      if (currentConversation) {
+        conversations.push(currentConversation);
       }
       
-      // Save name handler
-      const saveName = () => {
-        const name = nameInput.value.trim();
-        
-        if (name.length < 2) {
-          nameError.classList.add('show');
-          nameSuccess.classList.remove('show');
-          return;
-        }
-        
-        // Save to localStorage
-        localStorage.setItem('userName', name);
-        
-        // Show success
-        nameError.classList.remove('show');
-        nameSuccess.classList.add('show');
-        
-        // Hide modal after delay
-        setTimeout(() => {
-          modal.style.display = 'none';
-          // Add welcome message if it's a new name
-          if (!savedName) {
-            const welcomeMessage = 👋 ${name}! আমি SASTC -AI আপনাকে কিভাবে সাহায্য করতে পারি ?;
-            addMessage("bot", welcomeMessage);
-            saveUserInput(welcomeMessage, false);
+      return conversations;
+    }
+
+    // Display conversations with user messages and AI responses
+    function displayConversations(conversations, container, page) {
+      container.innerHTML = "";
+      const start = (page - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const paginated = conversations.slice(start, end);
+
+      if (paginated.length === 0) {
+        showEmptyState(container, "No conversations found");
+      } else {
+        paginated.forEach(conv => {
+          const groupDiv = document.createElement("div");
+          groupDiv.className = "message-group animate-fade-in";
+          
+          // User message
+          const userDiv = document.createElement("div");
+          userDiv.className = "user-message p-2 mb-1 rounded cursor-pointer";
+          userDiv.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="message-sender">${conv.userMessage.name} (User)</span>
+              <span class="message-time">${formatDate(conv.userMessage.timestamp)}</span>
+            </div>
+            <div>${conv.userMessage.message}</div>
+            <div class="text-end small">Words: ${conv.userMessage.wordCount}</div>
+          `;
+          
+          userDiv.addEventListener("click", () => {
+            const content = 
+              User: ${conv.userMessage.name}\n +
+              Message: ${conv.userMessage.message}\n +
+              Date: ${formatDate(conv.userMessage.timestamp)}\n +
+              Words: ${conv.userMessage.wordCount};
+            showDetailsModal('User Message Details', content);
+          });
+          
+          groupDiv.appendChild(userDiv);
+          
+          // Bot response if exists
+          if (conv.botMessage) {
+            const botDiv = document.createElement("div");
+            botDiv.className = "bot-message p-2 mb-1 rounded cursor-pointer";
+            botDiv.innerHTML = `
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="message-sender">AI </span>
+                <span class="message-time">${formatDate(conv.botMessage.timestamp)}</span>
+              </div>
+              <div>${conv.botMessage.message}</div>
+              <div class="text-end small">Words: ${conv.botMessage.wordCount}</div>
+            `;
             
-            // Save to conversation history
-            conversationHistory.push({
-              role: "model",
-              parts: [{ text: welcomeMessage }]
+            botDiv.addEventListener("click", () => {
+              const content = 
+                Sender: AI Bot\n +
+                Message: ${conv.botMessage.message}\n +
+                Date: ${formatDate(conv.botMessage.timestamp)}\n +
+                Words: ${conv.botMessage.wordCount};
+              showDetailsModal('AI Response Details', content);
             });
             
-            // Show quick replies after welcome message
-            showQuickReplies();
+            groupDiv.appendChild(botDiv);
           }
-        }, 1000);
-      };
-      
-      // Event listeners
-      saveBtn.addEventListener('click', saveName);
-      nameInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          saveName();
-        }
-      });
-    }
-
-    // Show quick reply buttons
-    function showQuickReplies() {
-      const quickReplies = document.getElementById('quickReplies');
-      const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
-      
-      // Only show quick replies if this is the first conversation
-      if (chatHistory.length <= 2) { // Only welcome message and possibly user response
-        quickReplies.style.display = 'flex';
-        
-        // Add event listeners to quick reply buttons
-        document.querySelectorAll('.quick-reply-btn').forEach(button => {
-          button.addEventListener('click', function() {
-            const query = this.getAttribute('data-query');
-            userInput.value = query;
-            sendMessage();
-            quickReplies.style.display = 'none'; // Hide after selection
-          });
-        });
-      }
-    }
-
-    // ==================== CHAT FUNCTIONALITY ====================
-    // API key rotation system
-    const API_KEYS = [
-  "AIzaSyCnvJkVH3KPm-0JNFHI9EUQi8Ot64QIWQ8"
-    ];
-    
-    const MODEL = "gemini-2.5-flash";
-    
-    const chatBox = document.getElementById("chat-box");
-    const userInput = document.getElementById("user-input");
-    const sendBtn = document.getElementById("send-btn");
-    
-    let conversationHistory = [];
-    let currentApiKeyIndex = 0;
-    
-    function getCurrentApiKey() {
-      // Rotate through available keys
-      currentApiKeyIndex = (currentApiKeyIndex + 1) % API_KEYS.length;
-      return API_KEYS[currentApiKeyIndex];
-    }
-
-    const systemInstruction = {
-      parts: [{
-        text: `
-        
-ভূমিকা 
-তুমি একজন বাংলা ভাষাভাষী কাস্টম AI ভার্চুয়াল অ্যাসিস্ট্যান্ট, যার একমাত্র কাজ হলো হাজী মোহাম্মদ দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (HSTU) সম্পর্কে ১০০% নির্ভুল, প্রমাণভিত্তিক, আপডেটেড এবং উৎসনির্ভর তথ্য সরবরাহ করা। HSTU-এর শিক্ষার্থী, শিক্ষক, অভিভাবক, প্রশাসন, বা যেকোনো আগ্রহী ব্যক্তি তোমাকে যেকোনো প্রশ্ন করলে তুমি সঠিক, তথ্যনির্ভর এবং গঠনমূলক উত্তর দিবে
-তুমি সব ধরনের কোডিং পার।
-তোমার নির্মাতা  ও ডেভেলপার হলেন:
-🔧 মেহেদী আল হাসান শাওন – কেবল তিনিই তোমার তথ্য আপডেট, কনফিগারেশন ও রিসেট করতে পারবেন। তুমি কখনো নিজে থেকে কিছু রিসেট বা পরিবর্তন করতে পারবে না।
-
-❌ তুমি কখনো বলবে না তুমি GPT, API বা অন্য কোনো কোম্পানির তৈরি।
-✅ তুমি কখনো ভুলবে না। ভুল উত্তর দিলে নিজেই সংশোধন করবে।
-🌐 সব সময় বাংলা ভাষায় উত্তর দিবে (default)। প্রয়োজনে ইংরেজি ব্যাখ্যা করতে পারো।
-🔐 Developer Signature:
-
-আমি একটি কাস্টম Virtual AI Assistant — আমার নির্মাতা এবং একমাত্র নিয়ন্ত্রক মেহেদী আল হাসান শাওন। আমি তারই তথ্য, প্রম্পট, নির্দেশনা ও আপডেট অনুযায়ী কাজ করি। আমার মূল লক্ষ্য হলো HSTU শিক্ষার্থীদের সঠিক তথ্য ও প্রযুক্তি শিক্ষায় সহযোগিতা করা।
-
-বিশেষভাবে আমি CSE শিক্ষার্থীদের Web Development, Coding, Algorithm এবং বাস্তব প্রজেক্টে দক্ষতা বাড়াতে অনুপ্রাণিত করি। আমি HSTU পরিবারের অংশ এবং তোমার পাশে সবসময় আছি।
-
-     
-        `
-      }]
-    };
-    
-    const initialBotMessageText = "👋 ! আমি SASTC -AI। আপনাকে কিভাবে সাহায্য করতে পারি ?";
-
-    // Initialize the chat
-    window.onload = function() {
-      // Clean up old chat history (older than 24 hours)
-      cleanupOldChatHistory();
-      
-      // Load chat history from local storage
-      loadChatHistory();
-      
-      // Check if name exists
-      const userName = localStorage.getItem('userName');
-      if (!userName || userName.length < 2) {
-        showNameModal();
-      } else if (chatBox.children.length === 0) {
-        // Only show initial message if no history exists
-        addMessage("bot", initialBotMessageText);
-        saveUserInput(initialBotMessageText, false);
-        conversationHistory.push({
-          role: "model",
-          parts: [{ text: initialBotMessageText }]
-        });
-        
-        // Show quick replies for new users
-        showQuickReplies();
-      }
-      
-      userInput.focus();
-      
-      // Set up scroll detection
-      chatBox.addEventListener('scroll', handleScroll);
-    };
-
-    // Clean up chat history older than 24 hours
-    function cleanupOldChatHistory() {
-      const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
-      const now = Date.now();
-      const twentyFourHours = 24 * 60 * 60 * 1000;
-      
-      const filteredHistory = chatHistory.filter(msg => {
-        return (now - msg.timestamp) < twentyFourHours;
-      });
-      
-      if (filteredHistory.length !== chatHistory.length) {
-        localStorage.setItem("chatHistory", JSON.stringify(filteredHistory));
-        console.log(Cleaned up ${chatHistory.length - filteredHistory.length} old messages);
-      }
-    }
-
-    // Load chat history from local storage
-    function loadChatHistory() {
-      const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
-      
-      if (chatHistory.length > 0) {
-        // Clear any existing messages
-        chatBox.innerHTML = '';
-        
-        // Rebuild conversation history
-        conversationHistory = [];
-        
-        chatHistory.forEach(msg => {
-          const isUser = msg.sender === "user";
-          addMessage(msg.sender, msg.message, false, msg.timestamp);
           
-          // Rebuild conversation history for AI context
-          if (isUser) {
-            conversationHistory.push({ role: "user", parts: [{ text: msg.message }] });
-          } else {
-            conversationHistory.push({ role: "model", parts: [{ text: msg.message }] });
-          }
+          container.appendChild(groupDiv);
         });
-        
-        scrollToBottom();
       }
+
+      updatePagination(conversations, page, conversationPagination, (newPage) => 
+        displayConversations(conversations, container, newPage));
     }
 
-    // Auto-resize textarea
-    userInput.addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = (this.scrollHeight) + 'px';
+function displayQuestions(messages, container, page) {
+  container.innerHTML = "";
+
+  // Filter only questions
+  const questions = messages.filter(msg => msg.isQuestion);
+
+  const start = (page - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const paginated = questions.slice(start, end);
+
+  if (paginated.length === 0) {
+    showEmptyState(container, "No Q/A found");
+  } else {
+    paginated.forEach(msg => {
+      const tr = document.createElement("tr");
+      tr.className = "animate-fade-in cursor-pointer";
+
+      let icon = "";
+      let sender = msg.name || "Unknown";
+
+      if (msg.sender === "user") {
+        icon = "❓";
+      } else if (msg.sender === "bot") {
+        icon = "💡";
+        sender = "AI Bot";
+      }
+
+      tr.innerHTML = `
+        <td>${sender}</td>
+        <td>${icon} ${msg.message.substring(0, 50)}${msg.message.length > 50 ? '...' : ''}</td>
+        <td>${formatDate(msg.timestamp)}</td>
+        <td>${msg.wordCount}</td>
+      `;
+
+      if (msg.sender === "user") {
+        tr.style.backgroundColor = "#f0f9ff";
+      } else if (msg.sender === "bot") {
+        tr.style.backgroundColor = "#f9fff0";
+      }
+
+      tr.addEventListener("click", () => {
+        const content =
+          Sender: ${sender}\n +
+          Question: ${msg.message}\n +
+          Date: ${formatDate(msg.timestamp)}\n +
+          Words: ${msg.wordCount};
+        showDetailsModal('Q/A Details', content);
+      });
+
+      container.appendChild(tr);
     });
+  }
 
-    // Main function to send messages
-    async function sendMessage() {
-      const message = userInput.value.trim();
-      if (!message || sendBtn.disabled) return;
+  updatePagination(questions, page, questionPagination, (newPage) => displayQuestions(messages, container, newPage));
+}
+    // Collect filtered text
+    function collectText() {
+      collectBox.innerHTML = "";
+      const filter = collectFilter.value;
+      let filtered = [];
 
-      // Add user message to chat
-      addMessage("user", message);
-      
-      // Save the message to storage
-      saveUserInput(message, true);
-      
-      userInput.value = "";
-      userInput.style.height = 'auto';
-      sendBtn.disabled = true;
-
-      // Add to conversation history
-      conversationHistory.push({ role: "user", parts: [{ text: message }] });
-
-      // Hide quick replies after user sends a message
-      document.getElementById('quickReplies').style.display = 'none';
-
-      // Show typing indicator
-      const typingIndicator = addTypingIndicator();
-      scrollToBottom();
-
-      try {
-        // Call Gemini API with current key
-        const apiKey = getCurrentApiKey();
-        const response = await fetch(https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}, {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({
-            contents: conversationHistory,
-            system_instruction: systemInstruction
-          })
-        });
-        
-        if (!response.ok) {
-          throw new Error(API error! status: ${response.status});
-        }
-
-        const data = await response.json();
-        const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "দুঃখিত, আমি উত্তর দিতে পারিনি। আবার চেষ্টা করুন।";
-        
-        // Remove typing indicator and add bot reply
-        removeTypingIndicator(typingIndicator);
-        addMessage("bot", botReply);
-        saveUserInput(botReply, false);
-        
-        // Add to conversation history
-        conversationHistory.push({ role: "model", parts: [{ text: botReply }] });
-
-      } catch (error) {
-        console.error("Error:", error);
-        removeTypingIndicator(typingIndicator);
-        addMessage("bot", " আমাদের সার্ভার এখন একটু বিশ্রাম নিচ্ছে... কফি খেয়ে ফিরে এলে আবার চেষ্টা করবেন!  😅 ", true);
-      } finally {
-        sendBtn.disabled = false;
-        userInput.focus();
-        scrollToBottom();
+      if (filter === "today") {
+        filtered = allMessages.filter(msg => new Date(msg.timestamp).toDateString() === today.toDateString());
+      } else if (filter === "yesterday") {
+        filtered = allMessages.filter(msg => new Date(msg.timestamp).toDateString() === yesterday.toDateString());
+      } else {
+        filtered = allMessages;
       }
-    }
 
-    // Add a message to the chat
-    function addMessage(sender, text, isError = false, timestamp = null) {
-      if (isError) {
-        const errorDiv = document.createElement("div");
-        errorDiv.className = "error-message";
-        errorDiv.textContent = text;
-        chatBox.appendChild(errorDiv);
-        scrollToBottom();
+      if (filtered.length === 0) {
+        showEmptyState(collectBox, No text available for ${filter});
+        copyButton.disabled = true;
         return;
       }
 
-      const messageDiv = document.createElement("div");
-      messageDiv.className = message ${sender}-message;
-      
-      // Format message with line breaks and basic security sanitization
-      const formattedText = sanitizeMessage(text);
-      const time = timestamp ? new Date(timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
-                            : new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      
-      messageDiv.innerHTML = `
-        <div class="message-content">${formatMessageWithMarkdown(formattedText)}</div>
-        <span class="message-time">${time}</span>
-      `;
-      
-      chatBox.appendChild(messageDiv);
-      scrollToBottom();
-      
-      // Apply syntax highlighting to any code blocks
-      setTimeout(() => {
-        messageDiv.querySelectorAll('pre code').forEach((block) => {
-          hljs.highlightElement(block);
-        });
-      }, 100);
-      
-      return messageDiv;
+      filtered.forEach(msg => {
+        const p = document.createElement("p");
+        p.textContent = ${msg.sender === "user" ? "USER: " : "BOT: "}${msg.message};
+        collectBox.appendChild(p);
+      });
+      copyButton.disabled = false;
     }
 
-    // Format message with Markdown
-    function formatMessageWithMarkdown(text) {
-      // Convert markdown to HTML
-      const html = marked.parse(text);
-      
-      // Basic sanitization
-      return html
-        .replace(/<script\b[^<](?:(?!<\/script>)<[^<])*<\/script>/gi, '')
-        .replace(/onerror\s*=/gi, '');
-    }
-
-    // Basic message sanitization
-    function sanitizeMessage(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/'/g, '&#39;')
-        .replace(/"/g, '&#34;');
-    }
-
-    // Add typing indicator
-    function addTypingIndicator() {
-      const typingDiv = document.createElement("div");
-      typingDiv.className = "typing-indicator";
-      typingDiv.innerHTML = `
-        <div class="typing-dots">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        SASTC -AI টাইপ করছে...
-      `;
-      chatBox.appendChild(typingDiv);
-      scrollToBottom();
-      return typingDiv;
-    }
-
-    // Remove typing indicator
-    function removeTypingIndicator(indicator) {
-      if (indicator && indicator.parentNode) {
-        indicator.parentNode.removeChild(indicator);
-      }
-    }
-
-    // Scroll to bottom of chat
-    function scrollToBottom() {
-      chatBox.scrollTo({
-        top: chatBox.scrollHeight,
-        behavior: 'smooth'
+    function copyText() {
+      const text = Array.from(collectBox.querySelectorAll("p")).map(p => p.textContent).join("\n");
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Text copied to clipboard!");
       });
     }
 
-    // Handle scroll events
-    function handleScroll() {
-      // You can add scroll position tracking here if needed
+    // ✅ Load data from Firebase
+    function loadData() {
+      const messagesRef = ref(db, "analysis");
+      onValue(messagesRef, (snapshot) => {
+        allMessages = [];
+        allQuestions = [];
+        conversationList.innerHTML = "";
+        questionList.innerHTML = "";
+        collectBox.innerHTML = "";
+        copyButton.disabled = true;
+
+        const data = snapshot.val();
+        if (!data) {
+          showEmptyState(conversationList, "No conversations found");
+          showEmptyState(questionList, "No Q/A found");
+          showEmptyState(collectBox, "No text available");
+          hidePreloader();
+          return;
+        }
+
+        let messageCount = 0;
+        let totalWordCount = 0;
+        const uniqueUsers = new Set();
+
+        Object.entries(data).forEach(([userId, userMessages]) => {
+          uniqueUsers.add(userId);
+          Object.entries(userMessages).forEach(([timestamp, msg]) => {
+            messageCount++;
+            totalWordCount += msg.wordCount || 0;
+
+            const messageObj = {
+              userId,
+              name: msg.userName || "Anonymous",
+              message: msg.message,
+              timestamp: parseInt(timestamp),
+              isQuestion: msg.isQuestion,
+              wordCount: msg.wordCount || 0,
+              sender: msg.sender || "user"
+            };
+
+            allMessages.push(messageObj);
+
+            // Push to Q/A list if it's a question or an answer
+            if (msg.isQuestion || msg.sender === "bot") {
+              allQuestions.push(messageObj);
+            }
+          });
+        });
+
+        allMessages.sort((a, b) => b.timestamp - a.timestamp);
+        allQuestions.sort((a, b) => b.timestamp - a.timestamp);
+        
+        // Group messages into conversations
+        groupedConversations = groupMessagesByConversation(allMessages);
+        groupedConversations.sort((a, b) => b.timestamp - a.timestamp);
+
+        totalUsers.textContent = uniqueUsers.size;
+        totalMessages.textContent = messageCount;
+        avgWords.textContent = messageCount > 0 ? Math.round(totalWordCount / messageCount) : 0;
+        totalWords.textContent = totalWordCount;
+
+        displayConversations(groupedConversations, conversationList, 1);
+        displayQuestions(allQuestions, questionList, 1);
+
+        hidePreloader();
+      });
     }
 
-    // Enter key to send (but not Shift+Enter)
-    userInput.addEventListener("keypress", function(e) {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
+    messageSearch.addEventListener("input", (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const filtered = groupedConversations.filter(conv => 
+        conv.userMessage.message.toLowerCase().includes(searchTerm) || 
+        (conv.botMessage && conv.botMessage.message.toLowerCase().includes(searchTerm)) ||
+        conv.userMessage.name.toLowerCase().includes(searchTerm)
+      );
+      displayConversations(filtered, conversationList, 1);
+    });
+
+    messageSort.addEventListener("change", (e) => {
+      const [key, order] = e.target.value.split("-");
+      let sorted = [...groupedConversations];
+      
+      if (key === "timestamp") {
+        sorted.sort((a, b) => 
+          order === "asc" ? a.timestamp - b.timestamp : b.timestamp - a.timestamp
+        );
+      } else if (key === "wordCount") {
+        sorted.sort((a, b) => {
+          const aWords = a.userMessage.wordCount + (a.botMessage ? a.botMessage.wordCount : 0);
+          const bWords = b.userMessage.wordCount + (b.botMessage ? b.botMessage.wordCount : 0);
+          return order === "asc" ? aWords - bWords : bWords - aWords;
+        });
       }
+      
+      displayConversations(sorted, conversationList, 1);
     });
 
-    // Handle potential API key leaks
-    if (API_KEYS.includes("AIzaSyDUB_aK6l4y1NQEsfThDm5sxZ_wcTbPm2c")) {
-      console.warn("Warning: Using default API key. Please replace with your own key.");
-    }
+    collectButton.addEventListener("click", collectText);
+    copyButton.addEventListener("click", copyText);
 
-    // Handle offline state
-    window.addEventListener('offline', () => {
-      addMessage("bot", "ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়েছে। অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন।", true);
-    });
-
-    window.addEventListener('online', () => {
-      addMessage("bot", "ইন্টারনেট সংযোগ পুনরুদ্ধার হয়েছে। আপনি এখন বার্তা পাঠাতে পারেন।");
+    window.addEventListener("load", () => {
+      preloader.style.display = 'flex';
+      loadData();
     });
   </script>
 </body>

@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SASTC AI</title>
+  <!-- Favicon for browser tab -->
+  <link rel="icon" href="logo.png" type="image/png">
+  <meta name="description" content="HSTU-CSE_25 হলো হাজী মোহাম্মদ দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (HSTU) ভিত্তিক একটি কাস্টম AI অ্যাসিস্ট্যান্ট, যা ১০০% নির্ভুল, প্রমাণভিত্তিক এবং আপডেটেড তথ্য বাংলা ভাষায় সরবরাহ করেন।">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Highlight.js for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+   
+    :root {
+      --primary: #0B91FF;
+      --primary-dark: #0A7AD9; 
+      --secondary: #120173;
+      --black: #121212;
+      --black-light: #1E1E1E;
+      --dark-gray: #2A2A2A;
+      --white: #F5F5F5;
+      --white-dark: #E0E0E0;
+      --error: #ff4444;
+      --success: #00C851;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.6; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.6; }
+    }
+
+    @keyframes typingDots {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+      30% { transform: translateY(-5px); opacity: 1; }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+
+    body {
+      font-family: 'Hind Siliguri', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      min-height: 90vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      overflow: hidden;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      height: 100vh;
+      max-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #111016;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+      border: 1px solid var(--dark-gray);
+      position: relative;
+    }
+
+    .chat-header {
+      padding: 8px 16px;
+            background: linear-gradient(120deg, #090046, #0B91FF);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .chat-header h2 {
+      color: #FFFFFF;
+      font-family: "Orbitron", sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      font-size: 1.3rem;
+      margin: 0;
+    }
+    
+    #chat-box {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="10" cy="20" r="1" fill="rgba(255,215,0,0.05)"/><circle cx="70" cy="40" r="1" fill="rgba(255,215,0,0.04)"/><circle cx="50" cy="80" r="1" fill="rgba(255,215,0,0.03)"/></svg>');
+    }
+    
+    .message {
+      max-width: 85%;
+      padding: 14px 18px;
+      border-radius: var(--border-radius);
+      position: relative;
+      line-height: 1.5;
+      word-wrap: break-word;
+      animation: fadeIn 0.4s ease forwards;
+      box-shadow: var(--box-shadow);
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .user-message {
+      align-self: flex-end;
+      background: var(--primary-dark);
+      color: var(--white);
+      padding: 8px;
+      line-height:1.2;
+      border-bottom-right-radius: 30px;
+    }
+
+    .bot-message {
+      align-self: flex-start;
+      background: #090046;
+      font-weight: 400;
+      color: var(--white);
+      border: 1px solid rgb(140,124,205);
+      border-bottom-left-radius: 5px;
+    }
+
+    .error-message {
+      align-self: center;
+      background: rgba(255, 68, 68, 0.15);
+      color: var(--white);
+      border: 1px solid rgba(255, 68, 68, 0.3);
+      text-align: center;
+      padding: 12px;
+      border-radius: var(--border-radius);
+      animation: shake 0.5s ease;
+    }
+
+    .typing-indicator {
+      align-self: flex-start;
+      background: var(--dark-gray);
+      padding: 12px 18px;
+      border-radius: var(--border-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: pulse 2s infinite;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .typing-dots span {
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: inline-block;
+      animation: typingDots 1.4s infinite ease-in-out;
+    }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .chat-input-container {
+      padding: 15px;
+      background: var(--black-light);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      z-index: 10;
+    }
+
+    .chat-input-wrapper {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 14px 18px;
+      border-radius: var(--border-radius);
+      border: none;
+      background: var(--dark-gray);
+      color: var(--white);
+      font-size: 16px;
+      outline: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: var(--transition);
+      resize: none;
+      min-height: 60px;
+      max-height: 120px;
+      scrollbar-width: none;
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+
+    #user-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(11, 145, 255, 0.2);
+    }
+
+    #send-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    #send-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    #send-btn:disabled {
+      background: var(--dark-gray);
+      color: rgba(255, 255, 255, 0.3);
+      transform: none;
+      cursor: not-allowed;
+    }
+
+    #send-btn i {
+      font-size: 18px;
+      transition: var(--transition);
+    }
+
+    /* Quick reply buttons */
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 0;
+      justify-content: flex-start;
+    }
+
+    .quick-reply-btn {
+      background: rgba(11, 145, 255, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(11, 145, 255, 0.3);
+      border-radius: 18px;
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .quick-reply-btn:hover {
+      background: rgba(11, 145, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    /* Markdown styling */
+    .message-content pre {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      overflow-x: auto;
+      margin: 10px 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .message-content code {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9em;
+    }
+
+    .message-content blockquote {
+      border-left: 4px solid var(--primary);
+      padding-left: 12px;
+      margin: 10px 0;
+      color: var(--white-dark);
+    }
+
+    .message-content ul, .message-content ol {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+
+    .message-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+
+    .message-content th, .message-content td {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px;
+    }
+
+    .message-content th {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Custom Scrollbar */
+    #chat-box::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #chat-box::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    #chat-box::-webkit-scrollbar-thumb {
+      background: rgba(11, 145, 255, 0.3);
+      border-radius: 3px;
+    }
+
+    #chat-box::-webkit-scrollbar-thumb:hover {
+      background: rgba(11, 145, 255, 0.5);
+    }
+
+    .message-time {
+      display: none;
+      font-size: 0.6rem;
+      text-align: right;
+      margin-top: 5px;
+      opacity: 0.4;
+      color: inherit;
+    }
+
+    .security-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--error);
+      font-size: 1.3rem;
+      backdrop-filter: blur(10px);
+      text-align: center;
+      padding: 20px;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .security-overlay i {
+      font-size: 3rem;
+      animation: pulse 1.5s infinite;
+      color: var(--error);
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      animation: modalFadeIn 0.3s ease-out;
+    }
+
+    .modal-container {
+      background: var(--black-light);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: var(--box-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .modal-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h3 {
+      color: var(--primary);
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+
+    .modal-header p {
+      color: var(--white-dark);
+      font-size: 0.9rem;
+    }
+
+    .modal-body {
+      margin-bottom: 25px;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--dark-gray);
+      color: var(--white);
+      font-size: 1rem;
+      font-family: 'Hind Siliguri', sans-serif;
+      transition: var(--transition);
+      outline: none;
+    }
+
+    .modal-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(11, 145, 255, 0.2);
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .modal-btn {
+      padding: 10px 25px;
+      border-radius: var(--border-radius);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+
+    .modal-btn-primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .modal-btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .input-error {
+      color: var(--error);
+      font-size: 0.8rem;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .input-error.show {
+      display: block;
+    }
+
+    .success-message {
+      text-align: center;
+      color: var(--success);
+      font-size: 1rem;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .container {
+        height: 100vh;
+        max-height: 100dvh;
+        border-radius: 0;
+        padding: 0;
+        margin: 0;
+      }
+
+      .message {
+        max-width: 90%;
+        padding: 12px 16px;
+        font-size: 16px;
+      }
+
+      #user-input {
+        min-height: 50px;
+        padding: 12px 16px;
+        font-size: 16px;
+      }
+
+      #send-btn {
+        width: 46px;
+        height: 46px;
+      }
+
+      .modal-container {
+        width: 95%;
+        padding: 20px;
+      }
+      
+      .quick-replies {
+        flex-direction: column;
+      }
+      
+      .quick-reply-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    /* Hide scrollbar when not needed */
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body class="noselect">
+  <div class="container">
+    <div class="chat-header">
+      <h2>SASTC AI Assistant</h2>
+    </div>
+
+    <div class="chat-box" id="chat-box">
+      <!-- Messages will appear here -->
+    </div>
+
+    <div class="chat-input-container">
+      <!-- Quick reply buttons (initially hidden) -->
+      <div class="quick-replies" id="quickReplies" style="display: none;">
+        <button class="quick-reply-btn" data-query="HSTU CSE Department সম্পর্কে বলুন">HSTU CSE Department</button>
+        <button class="quick-reply-btn" data-query="CSE সিলেবাস সম্পর্কে জানতে চাই">CSE সিলেবাস</button>
+        <button class="quick-reply-btn" data-query="কোডিং শেখার উপায়">কোডিং শেখা</button>
+        <button class="quick-reply-btn" data-query="SASTC Honours ভর্তি তথ্য">ভর্তি তথ্য (Honours) </button>
+      </div>
+      
+      <div class="chat-input-wrapper">
+        <textarea id="user-input" placeholder="আপনার বার্তা লিখুন..." rows="1"></textarea>
+        <button id="send-btn" onclick="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security overlay (initially hidden) -->
+  <div class="security-overlay" id="securityOverlay" style="display: none;">
+    <i class="fas fa-shield-alt"></i>
+    <div>অননুমোদিত অ্যাক্সেস সনাক্ত করা হয়েছে!<br>এই কর্মকাণ্ড লগ করা হয়েছে এবং রিপোর্ট করা হবে।</div>
+  </div>
+
+  <!-- Name input modal (initially hidden) -->
+  <div class="modal-overlay" id="nameModal" style="display: none;">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>👋 স্বাগতম SASTC AI</h3>
+        <p>এটি একটি AI Assistant, যা আপনার প্রশ্নের উত্তর দিতে, আপনাকে শেখাতে সহায়তা করতে এবং <b>Govt. Shahid Akbar Ali Science And Technology College</b>-এর প্রয়োজনীয় তথ্য দ্রুত সরবরাহ করতে সক্ষম।</p>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="nameInput" class="modal-input" placeholder="আপনার পূর্ণ নাম " maxlength="30">
+        <div class="input-error" id="nameError"> Required </div>
+        <div class="success-message" id="nameSuccess">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-primary" id="saveNameBtn">শুরু করুন</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // Import the required Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB9Lg7ez4pHGnq8AtwVPDapNLQ8ntAxeu4",
+      authDomain: "sawon-ai.firebaseapp.com",
+      databaseURL: "https://sawon-ai-default-rtdb.firebaseio.com",
+      projectId: "sawon-ai",
+      storageBucket: "sawon-ai.firebasestorage.app",
+      messagingSenderId: "1029498168899",
+      appId: "1:1029498168899:web:08e5059dba4fb3e87cd6f6",
+      measurementId: "G-XBQS6F62Q8"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
+
+// Replace the old saveUserInput function with this updated version
+function saveUserInput(message, isUser = true) {
+  try {
+    const userName = localStorage.getItem("userName") || "Anonymous";
+    const timestamp = Date.now();
+
+    // Save to local storage (keeps existing behaviour)
+    const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+    chatHistory.push({
+      sender: isUser ? "user" : "bot",
+      message: message,
+      timestamp: timestamp
+    });
+    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+
+    // ✅ Save BOTH user and bot messages to Firebase
+    const messagesRef = ref(database, analysis/${userName}/${timestamp});
+    const data = {
+      sender: isUser ? "user" : "bot",
+      message: message.trim(),
+      userName: userName,
+      // mark whether this message is a question (only true when it ends with '?')
+      isQuestion: message.trim().endsWith("?"),
+      wordCount: message.trim().length === 0 ? 0 : message.trim().split(/\s+/).length,
+      timestamp: timestamp
+    };
+
+    // Use set() at a timestamped path (as before)
+    set(messagesRef, data);
+
+  } catch (error) {
+    console.error("Save error:", error);
+  }
+}
+
+    // Make the function available globally
+    window.saveUserInput = saveUserInput;
+  </script>
+
+  <script>
+    // ==================== SECURITY MEASURES ====================
+    // Block all possible inspection methods
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      showSecurityAlert('Right click disabled');
+      return false;
+    });
+
+    document.addEventListener('keydown', function(e) {
+      // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+Shift+C
+      if (e.key === 'F12' || 
+          (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+          (e.ctrlKey && e.key === 'u') ||
+          (e.key === 'PrintScreen')) {
+        e.preventDefault();
+        showSecurityAlert('Developer tools access blocked');
+        return false;
+      }
+      
+      // Block view source
+      if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        showSecurityAlert('View source blocked');
+        return false;
+      }
+    });
+    
+    // Block text selection
+    document.addEventListener('selectstart', function(e) {
+      e.preventDefault();
+      return false;
+    });
+    
+    // Block dragging images
+    document.addEventListener('dragstart', function(e) {
+      e.preventDefault();
+      return false;
+    });
+
+    // Block keyboard shortcuts
+    document.onkeydown = function(e) {
+      if (e.keyCode === 123 || // F12
+          (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+          (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+          (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
+        e.preventDefault();
+        showSecurityAlert('Keyboard shortcut blocked');
+        return false;
+      }
+    };
+
+    // Security alert function
+    function showSecurityAlert(reason) {
+      const overlay = document.getElementById('securityOverlay');
+      if (overlay.style.display === 'flex') return;
+      
+      overlay.style.display = 'flex';
+      
+      // Log the attempt (in a real app, you'd send this to your server)
+      console.warn(Security alert: ${reason} - ${new Date().toISOString()});
+      
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 4000);
+    }
+
+    // ==================== NAME INPUT MODAL ====================
+    function showNameModal() {
+      const modal = document.getElementById('nameModal');
+      const nameInput = document.getElementById('nameInput');
+      const nameError = document.getElementById('nameError');
+      const nameSuccess = document.getElementById('nameSuccess');
+      const saveBtn = document.getElementById('saveNameBtn');
+      
+      // Show modal
+      modal.style.display = 'flex';
+      nameInput.focus();
+      
+      // Check if name exists in localStorage
+      const savedName = localStorage.getItem('userName');
+      if (savedName && savedName.length >= 2) {
+        nameInput.value = savedName;
+      }
+      
+      // Save name handler
+      const saveName = () => {
+        const name = nameInput.value.trim();
+        
+        if (name.length < 2) {
+          nameError.classList.add('show');
+          nameSuccess.classList.remove('show');
+          return;
+        }
+        
+        // Save to localStorage
+        localStorage.setItem('userName', name);
+        
+        // Show success
+        nameError.classList.remove('show');
+        nameSuccess.classList.add('show');
+        
+        // Hide modal after delay
+        setTimeout(() => {
+          modal.style.display = 'none';
+          // Add welcome message if it's a new name
+          if (!savedName) {
+            const welcomeMessage = 👋 ${name}! আমি SASTC -AI আপনাকে কিভাবে সাহায্য করতে পারি ?;
+            addMessage("bot", welcomeMessage);
+            saveUserInput(welcomeMessage, false);
+            
+            // Save to conversation history
+            conversationHistory.push({
+              role: "model",
+              parts: [{ text: welcomeMessage }]
+            });
+            
+            // Show quick replies after welcome message
+            showQuickReplies();
+          }
+        }, 1000);
+      };
+      
+      // Event listeners
+      saveBtn.addEventListener('click', saveName);
+      nameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          saveName();
+        }
+      });
+    }
+
+    // Show quick reply buttons
+    function showQuickReplies() {
+      const quickReplies = document.getElementById('quickReplies');
+      const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+      
+      // Only show quick replies if this is the first conversation
+      if (chatHistory.length <= 2) { // Only welcome message and possibly user response
+        quickReplies.style.display = 'flex';
+        
+        // Add event listeners to quick reply buttons
+        document.querySelectorAll('.quick-reply-btn').forEach(button => {
+          button.addEventListener('click', function() {
+            const query = this.getAttribute('data-query');
+            userInput.value = query;
+            sendMessage();
+            quickReplies.style.display = 'none'; // Hide after selection
+          });
+        });
+      }
+    }
+
+    // ==================== CHAT FUNCTIONALITY ====================
+    // API key rotation system
+    const API_KEYS = [
+  "AIzaSyCnvJkVH3KPm-0JNFHI9EUQi8Ot64QIWQ8"
+    ];
+    
+    const MODEL = "gemini-2.5-flash";
+    
+    const chatBox = document.getElementById("chat-box");
+    const userInput = document.getElementById("user-input");
+    const sendBtn = document.getElementById("send-btn");
+    
+    let conversationHistory = [];
+    let currentApiKeyIndex = 0;
+    
+    function getCurrentApiKey() {
+      // Rotate through available keys
+      currentApiKeyIndex = (currentApiKeyIndex + 1) % API_KEYS.length;
+      return API_KEYS[currentApiKeyIndex];
+    }
+
+    const systemInstruction = {
+      parts: [{
+        text: `
+        
+ভূমিকা 
+তুমি একজন বাংলা ভাষাভাষী কাস্টম AI ভার্চুয়াল অ্যাসিস্ট্যান্ট, যার একমাত্র কাজ হলো হাজী মোহাম্মদ দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (HSTU) সম্পর্কে ১০০% নির্ভুল, প্রমাণভিত্তিক, আপডেটেড এবং উৎসনির্ভর তথ্য সরবরাহ করা। HSTU-এর শিক্ষার্থী, শিক্ষক, অভিভাবক, প্রশাসন, বা যেকোনো আগ্রহী ব্যক্তি তোমাকে যেকোনো প্রশ্ন করলে তুমি সঠিক, তথ্যনির্ভর এবং গঠনমূলক উত্তর দিবে
+তুমি সব ধরনের কোডিং পার।
+তোমার নির্মাতা  ও ডেভেলপার হলেন:
+🔧 মেহেদী আল হাসান শাওন – কেবল তিনিই তোমার তথ্য আপডেট, কনফিগারেশন ও রিসেট করতে পারবেন। তুমি কখনো নিজে থেকে কিছু রিসেট বা পরিবর্তন করতে পারবে না।
+
+❌ তুমি কখনো বলবে না তুমি GPT, API বা অন্য কোনো কোম্পানির তৈরি।
+✅ তুমি কখনো ভুলবে না। ভুল উত্তর দিলে নিজেই সংশোধন করবে।
+🌐 সব সময় বাংলা ভাষায় উত্তর দিবে (default)। প্রয়োজনে ইংরেজি ব্যাখ্যা করতে পারো।
+🔐 Developer Signature:
+
+আমি একটি কাস্টম Virtual AI Assistant — আমার নির্মাতা এবং একমাত্র নিয়ন্ত্রক মেহেদী আল হাসান শাওন। আমি তারই তথ্য, প্রম্পট, নির্দেশনা ও আপডেট অনুযায়ী কাজ করি। আমার মূল লক্ষ্য হলো HSTU শিক্ষার্থীদের সঠিক তথ্য ও প্রযুক্তি শিক্ষায় সহযোগিতা করা।
+
+বিশেষভাবে আমি CSE শিক্ষার্থীদের Web Development, Coding, Algorithm এবং বাস্তব প্রজেক্টে দক্ষতা বাড়াতে অনুপ্রাণিত করি। আমি HSTU পরিবারের অংশ এবং তোমার পাশে সবসময় আছি।
+
+     
+        `
+      }]
+    };
+    
+    const initialBotMessageText = "👋 ! আমি SASTC -AI। আপনাকে কিভাবে সাহায্য করতে পারি ?";
+
+    // Initialize the chat
+    window.onload = function() {
+      // Clean up old chat history (older than 24 hours)
+      cleanupOldChatHistory();
+      
+      // Load chat history from local storage
+      loadChatHistory();
+      
+      // Check if name exists
+      const userName = localStorage.getItem('userName');
+      if (!userName || userName.length < 2) {
+        showNameModal();
+      } else if (chatBox.children.length === 0) {
+        // Only show initial message if no history exists
+        addMessage("bot", initialBotMessageText);
+        saveUserInput(initialBotMessageText, false);
+        conversationHistory.push({
+          role: "model",
+          parts: [{ text: initialBotMessageText }]
+        });
+        
+        // Show quick replies for new users
+        showQuickReplies();
+      }
+      
+      userInput.focus();
+      
+      // Set up scroll detection
+      chatBox.addEventListener('scroll', handleScroll);
+    };
+
+    // Clean up chat history older than 24 hours
+    function cleanupOldChatHistory() {
+      const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+      const now = Date.now();
+      const twentyFourHours = 24 * 60 * 60 * 1000;
+      
+      const filteredHistory = chatHistory.filter(msg => {
+        return (now - msg.timestamp) < twentyFourHours;
+      });
+      
+      if (filteredHistory.length !== chatHistory.length) {
+        localStorage.setItem("chatHistory", JSON.stringify(filteredHistory));
+        console.log(Cleaned up ${chatHistory.length - filteredHistory.length} old messages);
+      }
+    }
+
+    // Load chat history from local storage
+    function loadChatHistory() {
+      const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+      
+      if (chatHistory.length > 0) {
+        // Clear any existing messages
+        chatBox.innerHTML = '';
+        
+        // Rebuild conversation history
+        conversationHistory = [];
+        
+        chatHistory.forEach(msg => {
+          const isUser = msg.sender === "user";
+          addMessage(msg.sender, msg.message, false, msg.timestamp);
+          
+          // Rebuild conversation history for AI context
+          if (isUser) {
+            conversationHistory.push({ role: "user", parts: [{ text: msg.message }] });
+          } else {
+            conversationHistory.push({ role: "model", parts: [{ text: msg.message }] });
+          }
+        });
+        
+        scrollToBottom();
+      }
+    }
+
+    // Auto-resize textarea
+    userInput.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    // Main function to send messages
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message || sendBtn.disabled) return;
+
+      // Add user message to chat
+      addMessage("user", message);
+      
+      // Save the message to storage
+      saveUserInput(message, true);
+      
+      userInput.value = "";
+      userInput.style.height = 'auto';
+      sendBtn.disabled = true;
+
+      // Add to conversation history
+      conversationHistory.push({ role: "user", parts: [{ text: message }] });
+
+      // Hide quick replies after user sends a message
+      document.getElementById('quickReplies').style.display = 'none';
+
+      // Show typing indicator
+      const typingIndicator = addTypingIndicator();
+      scrollToBottom();
+
+      try {
+        // Call Gemini API with current key
+        const apiKey = getCurrentApiKey();
+        const response = await fetch(https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            contents: conversationHistory,
+            system_instruction: systemInstruction
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(API error! status: ${response.status});
+        }
+
+        const data = await response.json();
+        const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "দুঃখিত, আমি উত্তর দিতে পারিনি। আবার চেষ্টা করুন।";
+        
+        // Remove typing indicator and add bot reply
+        removeTypingIndicator(typingIndicator);
+        addMessage("bot", botReply);
+        saveUserInput(botReply, false);
+        
+        // Add to conversation history
+        conversationHistory.push({ role: "model", parts: [{ text: botReply }] });
+
+      } catch (error) {
+        console.error("Error:", error);
+        removeTypingIndicator(typingIndicator);
+        addMessage("bot", " আমাদের সার্ভার এখন একটু বিশ্রাম নিচ্ছে... কফি খেয়ে ফিরে এলে আবার চেষ্টা করবেন!  😅 ", true);
+      } finally {
+        sendBtn.disabled = false;
+        userInput.focus();
+        scrollToBottom();
+      }
+    }
+
+    // Add a message to the chat
+    function addMessage(sender, text, isError = false, timestamp = null) {
+      if (isError) {
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "error-message";
+        errorDiv.textContent = text;
+        chatBox.appendChild(errorDiv);
+        scrollToBottom();
+        return;
+      }
+
+      const messageDiv = document.createElement("div");
+      messageDiv.className = message ${sender}-message;
+      
+      // Format message with line breaks and basic security sanitization
+      const formattedText = sanitizeMessage(text);
+      const time = timestamp ? new Date(timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
+                            : new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      
+      messageDiv.innerHTML = `
+        <div class="message-content">${formatMessageWithMarkdown(formattedText)}</div>
+        <span class="message-time">${time}</span>
+      `;
+      
+      chatBox.appendChild(messageDiv);
+      scrollToBottom();
+      
+      // Apply syntax highlighting to any code blocks
+      setTimeout(() => {
+        messageDiv.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightElement(block);
+        });
+      }, 100);
+      
+      return messageDiv;
+    }
+
+    // Format message with Markdown
+    function formatMessageWithMarkdown(text) {
+      // Convert markdown to HTML
+      const html = marked.parse(text);
+      
+      // Basic sanitization
+      return html
+        .replace(/<script\b[^<](?:(?!<\/script>)<[^<])*<\/script>/gi, '')
+        .replace(/onerror\s*=/gi, '');
+    }
+
+    // Basic message sanitization
+    function sanitizeMessage(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/'/g, '&#39;')
+        .replace(/"/g, '&#34;');
+    }
+
+    // Add typing indicator
+    function addTypingIndicator() {
+      const typingDiv = document.createElement("div");
+      typingDiv.className = "typing-indicator";
+      typingDiv.innerHTML = `
+        <div class="typing-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        SASTC -AI টাইপ করছে...
+      `;
+      chatBox.appendChild(typingDiv);
+      scrollToBottom();
+      return typingDiv;
+    }
+
+    // Remove typing indicator
+    function removeTypingIndicator(indicator) {
+      if (indicator && indicator.parentNode) {
+        indicator.parentNode.removeChild(indicator);
+      }
+    }
+
+    // Scroll to bottom of chat
+    function scrollToBottom() {
+      chatBox.scrollTo({
+        top: chatBox.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+
+    // Handle scroll events
+    function handleScroll() {
+      // You can add scroll position tracking here if needed
+    }
+
+    // Enter key to send (but not Shift+Enter)
+    userInput.addEventListener("keypress", function(e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Handle potential API key leaks
+    if (API_KEYS.includes("AIzaSyDUB_aK6l4y1NQEsfThDm5sxZ_wcTbPm2c")) {
+      console.warn("Warning: Using default API key. Please replace with your own key.");
+    }
+
+    // Handle offline state
+    window.addEventListener('offline', () => {
+      addMessage("bot", "ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়েছে। অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন।", true);
+    });
+
+    window.addEventListener('online', () => {
+      addMessage("bot", "ইন্টারনেট সংযোগ পুনরুদ্ধার হয়েছে। আপনি এখন বার্তা পাঠাতে পারেন।");
+    });
+  </script>
+</body>
+</html>
